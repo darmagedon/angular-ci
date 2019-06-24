@@ -1,31 +1,24 @@
----
 sudo: required
-
 services:
-  - docker
-
+- docker
 branches:
   only:
-    - dev
-    - master
-
+  - dev
+  - master
 before_script:
-  - echo "Starting"
-
+- echo "Starting"
 script:
-  - docker build . -t darmagedon/angular-ci:latest
-
+- docker build . -t darmagedon/angular-ci:latest
 after_success:
-  - export BRANCH=$(if [ "$TRAVIS_PULL_REQUEST" == "false" ]; then echo $TRAVIS_BRANCH; else echo $TRAVIS_PULL_REQUEST_BRANCH; fi)
-  - echo ${BRANCH}
-  - if [ ${BRANCH} = "dev" ]; then
-      docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD;
-      docker tag darmagedon/angular-ci:latest darmagedon/angular-ci:dev;
-      docker push darmagedon/angular-ci:dev;
-    fi
-
-  - if [ ${BRANCH} = "master" ]; then
-      docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD;
-      docker tag darmagedon/angular-ci:latest darmagedon/angular-ci:stable;
-      docker push darmagedon/angular-ci:stable;
-    fi
+- export BRANCH=$(if [ "$TRAVIS_PULL_REQUEST" == "false" ]; then echo $TRAVIS_BRANCH;
+  else echo $TRAVIS_PULL_REQUEST_BRANCH; fi)
+- echo ${BRANCH}
+- if [ ${BRANCH} = "dev" ]; then docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD;
+  docker tag darmagedon/angular-ci:latest darmagedon/angular-ci:dev; docker push darmagedon/angular-ci:dev;
+  fi
+- if [ ${BRANCH} = "master" ]; then docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD;
+  docker tag darmagedon/angular-ci:latest darmagedon/angular-ci:stable; docker push
+  darmagedon/angular-ci:stable; fi
+notifications:
+  slack:
+    secure: UrG/1SWrbdPZqz1bCHFEwyXoxA5zB2HX6AHQ7W/Qhh8VIuFmo91aWcKp4yBDIn34UgTKg3EhHwtDaBEdCJlAqmx0ZDouGYDJDZ2MpF5pZyLpBCN0UISjP47kJRXY5IkJvaGruywUGc/0za29hqotLQqIm7CNgUHAieGN3n82iyxM9Dfg37CEStTw6WyEwM19JPdK/jrEMDX/BKnzFTDsrm8WCvClWdJ+twDTKjwOP8jjs3LkOpKTbVbVGkb8XvrtuXQAiHTla4WPlaIy+KNofxnLufCfmf0WPDzPhM9IMKqlq5NoBWspW0aZkX+BpZcweuMIyla25afvWzy/pYufAPC5bJHHMKkX3bWzEmXF0qL+ftLY/4JOD/rmVrHLXe8TcPnbRIgebbdUB8bX36ZO4Perg84n4ETUSRNkOk7oxheXA+3ViQp6z8gpWmJ6Odv1TvpPPe7w9JVEomcOLvXNuyk7W6CbVDvFNiuYaec68t0ZcohlFLb2lK2In2Yp2wQ/3OJHD+0NP+SWpYLgkN1SgVuhINnN6Qp6tT3PLARetLJFdfGWkdIFDUiYkVWd2WWjTW6syx0WpvAxsTJYh0g+mgCoeakXL1hqCpIS9bH4VqKK2IkIMjuiKJvt5L6NhR92dWVaLyboM2wjeHSVK8M03c7tLFkq0KPhpAookhf9j4Y=
